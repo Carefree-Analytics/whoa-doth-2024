@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Horse Parade Sign-In</title>
+    
+    <!-- Google Fonts for a Fun and Playful Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    
+    <!-- External CSS -->
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', cursive;
+    background-color: #f5f5dc; /* Beige for classic western feel */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    font-size: 18px;
+}
+
+/* Header Styling */
+.header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Station Info */
+.station-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#stationDisplay {
+    font-size: 1.5em;
+    color: #333;
+    margin-right: 10px;
+}
+
+#changeStopButton {
+    background: none;
+    border: none;
+    color: #8b4513; /* Saddle Brown for visibility */
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+#changeStopButton:hover {
+    color: #a0522d; /* Sienna on hover */
+}
+
+/* Form Container */
+.form-container {
+    position: relative;
+    background-color: #fffaf0; /* Floral White */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 80%;
+    padding: 10px;
+    border: 2px solid #8b4513;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: #a0522d;
+    outline: none;
+}
+
+/* Group Toggle Styling */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.toggle-label {
+    margin: 0 10px; /* Adjusted spacing */
+    font-size: 1.1em;
+    color: #333;
+}
+
+.toggle-label.active {
+    font-weight: bold;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px; /* Use percentage for flexible sizing */
+    height: 30px; /* Reduce height to be more proportional */
+    margin: 0 10px; /* Space it equally */
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7c8468;
+    transition: .4s;
+    border-radius: 15px; /* Adjusted for smaller height */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #8b4513; /* On state */
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px); /* Ensure it moves properly across */
+}
+
+/* Score Container */
+.score-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.score-container label {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    display: block;
+    color: #333;
+}
+
+.box-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #d2b48c; /* Tan */
+    border: 2px solid #8b4513; /* Saddle Brown */
+    border-radius: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.box:hover {
+    background-color: #8b4513;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.box:active {
+    transform: scale(0.95); /* Press-down effect */
+    background-color: #a0522d;
+}
+
+.box.selected {
+    background-color: #8b4513;
+    color: #fff;
+    transform: scale(1.15); /* Slightly larger when selected */
+}
+
+.box.disabled {
+    background-color: #f5f5dc; /* Beige */
+    border-color: #b5b5b5;
+    color: #b5b5b5;
+    cursor: not-allowed;
+}
+
+/* Score Feedback Animation */
+.score-feedback h3 {
+    font-size: 1.5em;
+    color: #8b4513;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.score-feedback h3.active {
+    transform: scale(1.2); /* Pop effect */
+    opacity: 1;
+}
+
+/* Submit Button */
+#btn {
+    width: 80%;
+    padding: 12px;
+    background-color: #8b4513;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#btn:hover:not([disabled]) {
+    background-color: #a0522d;
+    transform: scale(1.02);
+}
+
+#btn:disabled {
+    background-color: #f5f5dc;
+    color: #b5b5b5;
+    cursor: not-allowed;
+}
+
+/* Alerts */
+.alert, .fail-alert, .alert-process {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    z-index: 1000;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+}
+
+.alert {
+    border: 2px solid #4caf50;
+}
+
+.fail-alert {
+    border: 2px solid #ff0000;
+}
+
+.alert-process {
+    border: 2px solid #8b4513;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.alert-check, .alert-x {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.alert-check {
+    color: #4caf50;
+}
+
+.alert-x {
+    color: #ff0000;
+}
+
+.alert button, .fail-alert button {
+    padding: 10px 20px;
+    background-color: #a0522d;
+    border: none;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.alert button:hover, .fail-alert button:hover {
+    background-color: #8b4513;
+}
+
+/* Processing Animation */
+.spinner {
+    border: 4px solid #f5f5dc;
+    border-top: 4px solid #8b4513;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Pin Modal */
+.pin-modal {
+    display: none;
+    position: absolute; /* Changed to absolute */
+    top: 0;  /* Adjust as needed */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Overlay effect */
+    z-index: 1000; /* Ensure it is above other elements */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pin-content {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 25px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: scale(0.9); }
+to { opacity: 1; transform: scale(1); }
+}
+
+.pin-content input[type="number"] {
+width: 80%;
+padding: 10px;
+border: 2px solid #8b4513;
+border-radius: 10px;
+font-size: 1em;
+margin-top: 15px;
+text-align: center;
+transition: border-color 0.3s;
+}
+
+.pin-content input[type="number"]:focus {
+border-color: #a0522d;
+outline: none;
+}
+
+.pin-buttons {
+margin-top: 20px;
+display: flex;
+justify-content: space-around;
+}
+
+.pin-buttons button {
+padding: 10px 20px;
+background-color: #a0522d;
+border: none;
+color: white;
+border-radius: 10px;
+cursor: pointer;
+font-size: 1em;
+transition: background-color 0.3s;
+}
+
+.pin-buttons button:hover {
+background-color: #8b4513;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+.box {
+width: 40px;
+height: 40px;
+font-size: 1em;
+}
+
+#btn {
+    width: 90%;
+}
+
+.switch {
+    width: 50px; /* Adjust for smaller screens */
+    height: 25px; /* Reduce height */
+}
+
+.slider:before {
+    height: 21px;
+    width: 21px;
+    transform: translateX(25px); /* Adjust translate for smaller size */
+}
+
+input:checked + .slider:before {
+    transform: translateX(18px); /* smaller distance for smaller size */
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 90%;
+}
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Station Information -->
+    <div class="station-info">
+        <h2 id="stationDisplay">Ride Stop #</h2>
+        <button id="changeStopButton" title="Change Ride Stop">
+            <i class="fas fa-pencil-alt"></i>
+        </button>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <!-- Rider ID Input -->
+        <div class="form-group">
+            <label for="riderIDInput">Rider Number:</label>
+            <input
+                type="text"
+                id="riderIDInput"
+                placeholder="Enter Rider Number"
+                pattern="\d{3}"
+                maxlength="3"
+                inputmode="numeric"
+                required />
+        </div>
+
+        <!-- Group Toggle -->
+        <div class="form-group">
+            <div class="toggle-container">
+                <span class="toggle-label">Individual</span>
+                <label class="switch">
+                    <input type="checkbox" id="groupToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Group</span>
+            </div>
+        </div>
+
+        <!-- Costume Score -->
+        <div class="score-container">
+            <label for="riderScore">Costume Score:</label>
+            <div id="scoreButtons" class="box-container">
+                <!-- Dynamic Score Buttons (1-10) will be inserted here -->
+            </div>
+            <div class="score-feedback">
+                <h3 id="costumeScoreText"></h3>
+            </div>
+
+            <!-- Pin Modal -->
+            <div id="pinModal" class="pin-modal">
+                <div class="pin-content">
+                    <p>Please log in to activate your Ride Stop:</p>
+                    <input type="number" id="pinInput" placeholder="Enter PIN" />
+                    <div class="pin-buttons">
+                        <button onclick="closePinModal()">Cancel</button>
+                        <button onclick="submitPin()">Submit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Alert -->
+            <div class="alert">
+                <div class="alert-check">✓</div>
+                <p>Rider Details Successfully Submitted!</p>
+                <button onclick="closeAlert()">Close</button>
+            </div>
+
+            <!-- Failure Alert -->
+            <div class="fail-alert">
+                <div class="alert-x">x</div>
+                <p>Rider Details Submission Unsuccessful.<br /><br />Please try submitting again.</p>
+                <button onclick="closeAlert()">Close</button>
+                <p><i>If the problem persists, please reference the QR code at the Judge's booth.</i></p>
+            </div>
+
+            <!-- Processing Alert -->
+            <div class="alert-process">
+                <div class="spinner"></div>
+                <p id="processingText">Processing</p>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button id="btn" disabled>Submit Visit and Costume Score</button>
+    </div>
+
+    <!-- Main Header -->
+    <p id="mainHeader" style="margin-top: 20px; font-size: 1.2em; color: green; text-align: center;">
+        <i>Rider Details Ready to Submit!</i>
+    </p>
+
+    <!-- Hidden Form for Submission -->
+    <form id="formToSubmit">
+        <input type="hidden" name="riderID" id="riderID" value="" />
+        <input type="hidden" name="group" id="group" value="No" />
+        <input type="hidden" name="riderScore" id="hiddenRiderScore" value="" />
+        <input type="hidden" name="stationID" id="stationID" value="" />
+    </form>
+
+    <!-- External JavaScript -->
+    <script>
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeScoreButtons();
+            checkFields();
+            hideProcessing();
+
+            // If riderID is in the URL, set it to the input field
+            const urlParams = new URLSearchParams(window.location.search);
+            const riderIDFromURL = urlParams.get("riderID");
+            if (riderIDFromURL) {
+                document.getElementById("riderIDInput").value = riderIDFromURL;
+            }
+
+            // If group toggle is changed, update hidden input
+            document.getElementById("groupToggle").addEventListener("change", function() {
+                document.getElementById("group").value = this.checked ? "Group" : "Individual";
+                checkFields();
+            });
+
+            // Change Stop Button Event
+            document.getElementById("changeStopButton").addEventListener("click", function () {
+                const modal = document.getElementById("pinModal");
+                modal.style.display = "flex";
+                document.getElementById("pinInput").value = "";
+            });
+
+            // Check fields on input
+            document.getElementById("riderIDInput").addEventListener("input", checkFields);
+        });
+
+        document.getElementById("groupToggle").addEventListener("change", function() {
+            const individualLabel = document.querySelector(".toggle-label:first-child");
+            const groupLabel = document.querySelector(".toggle-label:last-child");
+            
+            if (this.checked) {
+                // Group is selected
+                individualLabel.style.textDecoration = 'none'; // Remove underline
+                individualLabel.style.color = '#333'; // Default color
+
+                groupLabel.style.textDecoration = 'underline'; // Add underline
+                groupLabel.style.color = '#8b4513'; // Brown color
+            } else {
+                // Individual is selected
+                individualLabel.style.textDecoration = 'underline'; // Add underline
+                individualLabel.style.color = '#7c8468'; // Green color for individual
+
+                groupLabel.style.textDecoration = 'none'; // Remove underline
+                groupLabel.style.color = '#333'; // Default color
+            }
+        });
+
+        let highestScoreSubmitted = 5; // Maximum score the judge can submit at first
+        let selectedScore = null;
+
+        // Initialize Score Buttons
+        function initializeScoreButtons() {
+            const scoreButtonsContainer = document.getElementById('scoreButtons');
+            scoreButtonsContainer.innerHTML = ''; // Clear existing buttons
+
+            // Create two rows
+            const row1 = document.createElement('div');
+            const row2 = document.createElement('div');
+            row1.style.display = 'flex';
+            row1.style.justifyContent = 'center';
+            row1.style.gap = '10px';
+            row2.style.display = 'flex';
+            row2.style.justifyContent = 'center';
+            row2.style.gap = '10px';
+
+            for (let i = 1; i <= 10; i++) {
+                const box = document.createElement('div');
+                box.classList.add('box');
+                box.setAttribute('data-value', i);
+                box.textContent = i;
+
+                // Initially, only allow scores 1-5, and unlock scores based on submissions
+                if (i > highestScoreSubmitted) {
+                    box.classList.add('disabled');
+                }
+
+                // Visually indicate if the button is selected
+                if (i === selectedScore) {
+                    box.classList.add('selected');
+                }
+
+                // Add buttons to the appropriate row
+                if (i <= 5) {
+                    row1.appendChild(box);
+                } else {
+                    row2.appendChild(box);
+                }
+            }
+
+            scoreButtonsContainer.appendChild(row1);
+            scoreButtonsContainer.appendChild(row2);
+        }
+
+        // Handle Score Selection
+        document.addEventListener('click', function(event) {
+            if (event.target.matches('.box') && !event.target.classList.contains('disabled')) {
+                const box = event.target;
+                const value = parseInt(box.getAttribute('data-value'), 10);
+
+                // Highlight selected box
+                document.querySelectorAll('.box').forEach(b => b.classList.remove('selected'));
+                box.classList.add('selected');
+
+                // Update selected score
+                selectedScore = value;
+
+                // Update feedback text
+                updateFeedback(value);
+
+                // Enable or disable the submit button
+                checkFields();
+            }
+        });
+
+        // Submit Button Event
+        document.getElementById("btn").addEventListener("click", async function () {
+            const riderID = document.getElementById("riderIDInput").value;
+            const stationID = localStorage.getItem("stationID");
+            const riderScore = selectedScore;
+            const group = document.getElementById("group").value;
+
+            const btn = document.getElementById("btn");
+            btn.disabled = true;
+
+            if (riderID && stationID && riderScore) {
+                // Populate the form fields
+                document.getElementById("riderID").value = riderID;
+                document.getElementById("hiddenRiderScore").value = riderScore;
+                document.getElementById("stationID").value = stationID;
+                document.getElementById("group").value = group;
+
+                showProcessing(); // Show processing alert
+
+                try {
+                    // Replace this URL with the URL of your Google Apps Script
+                    const scriptURL = "https://script.google.com/macros/s/AKfycbzw-AMVe3vhqhbhblLtDRHTJSO_Tc70ePe3Yk2rn7AljayiMYMLBHX8iZLHPMMMkoRpPw/exec";
+                    const response = await fetch(scriptURL, {
+                        method: "POST",
+                        body: new FormData(document.getElementById("formToSubmit")),
+                    });
+
+                    if (response.ok) {
+                        console.log("Success!", response);
+                        hideProcessing(); // Hide processing alert
+                        showAlert(); // Show success message
+
+                        // Check if the submitted score is equal to the current max allowed score
+                        if (riderScore === highestScoreSubmitted && highestScoreSubmitted < 10) {
+                            highestScoreSubmitted++;  // Unlock the next score
+                        }
+
+                        // Reinitialize the score buttons with the updated `highestScoreSubmitted`
+                        initializeScoreButtons();
+                        resetForm(); // Reset the form
+                    } else {
+                        hideProcessing();
+                        showFail(); // Show failure message
+                        throw new Error("Network response was not ok");
+                    }
+                } catch (error) {
+                    hideProcessing();
+                    showFail();
+                    console.error("Error!", error.message);
+                } finally {
+                    btn.disabled = false;
+                }
+            } else {
+                alert("Missing information. Cannot proceed.");
+                btn.disabled = false;
+            }
+        });
+
+        // Update Feedback Based on Score
+        function updateFeedback(score) {
+            const feedback = {
+                1: 'Basic effort',
+                2: 'Good try',
+                3: 'NICE! Well done!',
+                4: 'WOW! Excellent!',
+                5: 'Outstanding!',
+                6: 'Amazing!',
+                7: 'Phenomenal!',
+                8: 'Spectacular!',
+                9: 'Incredible!',
+                10: 'Masterpiece!'
+            };
+            const costumeScoreText = document.getElementById('costumeScoreText');
+            costumeScoreText.textContent = feedback[score] || '';
+        }
+
+        function checkFields() {
+            const btn = document.getElementById("btn");
+            const riderIDInput = document.getElementById("riderIDInput").value;
+            const scoreValid = selectedScore !== null;
+            const riderIDValid = validateRiderID(); // Make sure this checks for valid IDs
+            const stationDisplay = document.getElementById("stationDisplay").textContent;
+
+            // Check if the station is available and rider details are valid
+            const stationValid = stationDisplay !== "Ride Stop #";
+
+            if (riderIDValid && scoreValid && stationValid) {
+                btn.disabled = false; // Enable the button if everything is valid
+                document.getElementById("mainHeader").textContent = "Rider Details Ready to Submit!";
+                document.getElementById("mainHeader").style.color = 'green';
+            } else {
+                // If form is incomplete, disable the button
+                btn.disabled = true;
+
+                // Set appropriate error messages
+                if (!riderIDValid) {
+                    document.getElementById("mainHeader").textContent = "Invalid Rider Number.";
+                    document.getElementById("mainHeader").style.color = 'red';
+                } else if (!scoreValid) {
+                    document.getElementById("mainHeader").textContent = "Please select a costume score.";
+                    document.getElementById("mainHeader").style.color = 'red';
+                } else {
+                    document.getElementById("mainHeader").textContent = "Rider details missing.";
+                    document.getElementById("mainHeader").style.color = 'red';
+                }
+            }
+        }
+
+        // Validate Rider ID
+        function validateRiderID() {
+            const riderIDInput = document.getElementById("riderIDInput");
+            const riderIDValue = parseInt(riderIDInput.value, 10);
+            return riderIDValue >= 200 && riderIDValue <= 400;
+        }
+
+        // Show Alert
+        function showAlert() {
+            const alertBox = document.querySelector(".alert");
+            alertBox.style.display = "block";
+            setTimeout(() => {
+                closeAlert();
+            }, 5000);
+            checkFields();
+        }
+
+        // Show Failure Alert
+        function showFail() {
+            const failAlert = document.querySelector(".fail-alert");
+            failAlert.style.display = "block";
+            checkFields();
+        }
+
+        // Show Processing
+        let processingAnimation;
+        function animateProcessingDots() {
+            const processingText = document.getElementById("processingText");
+            if (processingText.textContent.length < 11) {
+                processingText.textContent += ".";
+            } else {
+                processingText.textContent = "Processing";
+            }
+        }
+
+        function showProcessing() {
+            const processingAlert = document.querySelector(".alert-process");
+            processingAlert.style.display = "flex";
+            processingAnimation = setInterval(animateProcessingDots, 500);
+        }
+
+        function hideProcessing() {
+            clearInterval(processingAnimation);
+            const processingAlert = document.querySelector(".alert-process");
+            processingAlert.style.display = "none";
+            document.getElementById("processingText").textContent = "Processing";
+        }
+
+        // Close Alerts
+        function closeAlert() {
+            const successAlert = document.querySelector(".alert");
+            successAlert.style.display = "none";
+            const failAlert = document.querySelector(".fail-alert");
+            failAlert.style.display = "none";
+        }
+
+        // Submit PIN Function
+        function submitPin() {
+            const pinCode = document.getElementById("pinInput").value;
+            if (pinCode === "") {
+                alert("Please enter a PIN code.");
+                return;
+            }
+            const sid = parseInt(pinCode) - 2300; // Assuming 2300 as the base for PINs
+            if (sid > 0 && sid < 15) {
+
+                // Store the station ID in localStorage
+                localStorage.setItem("stationID", sid);
+                console.log("PIN code is correct!");
+
+                // Update station display
+                const stationDisplay = document.getElementById("stationDisplay");
+                stationDisplay.textContent = "Ride Stop #" + sid;
+
+                // Close the modal
+                closePinModal();
+
+                // Hide processing after some time
+                hideProcessing(); // Call this appropriately based on your logic
+
+                // Ensure form fields are re-checked
+                checkFields();
+            } else {
+                localStorage.removeItem("stationID");
+                alert("Incorrect PIN code.");
+                document.getElementById("pinInput").value = "";
+            }
+        }
+
+        // Show Processing while waiting for PIN input
+        function openPinModal() {
+            const modal = document.getElementById("pinModal");
+            modal.style.display = "flex";
+            document.getElementById("pinInput").value = ""; // Reset PIN input
+        }
+
+// Close PIN modal
+function closePinModal() {
+const modal = document.getElementById("pinModal");
+modal.style.display = "none";
+hideProcessing(); // Ensure no processing spinner when closing the modal
+}
+
+function resetForm() {
+    document.getElementById("riderIDInput").value = "";
+    document.getElementById("groupToggle").checked = false;
+    document.getElementById("group").value = "No";
+    selectedScore = null;
+    initializeScoreButtons();
+    document.getElementById("costumeScoreText").textContent = "";
+
+    // Explicitly disable the submit button after reset
+    const btn = document.getElementById("btn");
+    btn.disabled = true; // Disable the button after resetting
+
+    checkFields(); // Re-check fields to ensure correct state
+}
+
+// Check Station on Load
+window.onload = function() {
+const stationIDFromLocalStorage = localStorage.getItem("stationID");
+const stationDisplay = document.getElementById("stationDisplay");
+if (stationIDFromLocalStorage) {
+stationDisplay.textContent = "Ride Stop #" + stationIDFromLocalStorage;
+} else {
+stationDisplay.textContent = "Ride Stop #";
+openPinModal();
+}
+};
+    </script>
+</body>
+</html>
