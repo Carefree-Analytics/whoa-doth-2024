@@ -222,7 +222,7 @@ input:checked + .slider:before {
     display: grid;
     grid-template-columns: repeat(5, 60px); /* Each row will have 5 columns */
     grid-template-rows: auto auto; /* Two rows */
-    gap: 20px;
+    gap: 15px;
     justify-content: center; /* Center the grid horizontally */
     row-gap: 20px; /* Optional: extra space between the two rows */
 }
@@ -588,6 +588,23 @@ background-color: #8b4513;
                 document.getElementById("riderIDInput").value = riderIDFromURL;
             }
 
+            // Station ID handling here
+            const stationIDFromLocalStorage = localStorage.getItem("stationID");
+            const stationDisplay = document.getElementById("stationDisplay");
+
+            // Debugging: Log the value retrieved from localStorage
+            console.log("Loaded stationID from localStorage:", stationIDFromLocalStorage);
+
+            if (stationIDFromLocalStorage) {
+                stationDisplay.textContent = "Ride Stop #" + stationIDFromLocalStorage;
+                console.log("Station Display updated with:", stationIDFromLocalStorage);
+                closePinModal();
+            } else {
+                stationDisplay.textContent = "Ride Stop #";
+                console.log("No valid stationID found. Opening PIN modal.");
+                openPinModal();  // Open modal for inputting PIN
+            }
+
             // If group toggle is changed, update hidden input
             document.getElementById("groupToggle").addEventListener("change", function() {
                 document.getElementById("group").value = this.checked ? "Group" : "Individual";
@@ -603,7 +620,24 @@ background-color: #8b4513;
 
             // Check fields on input
             document.getElementById("riderIDInput").addEventListener("input", checkFields);
+
+            // Set Individual label to bold and underlined on load
+            const individualLabel = document.querySelector(".toggle-label.left");
+            const groupLabel = document.querySelector(".toggle-label.right");
+            individualLabel.style.fontWeight = "bold";
+            individualLabel.style.textDecoration = "underline";
+            groupLabel.style.fontWeight = "normal";
+            groupLabel.style.textDecoration = "none";
         });
+
+        function saveHighestScore() {
+            localStorage.setItem('highestScoreSubmitted', highestScoreSubmitted);
+        }
+
+        function loadHighestScore() {
+            const storedScore = localStorage.getItem('highestScoreSubmitted');
+            highestScoreSubmitted = storedScore ? parseInt(storedScore, 10) : 5;
+        }
 
         // Handle switch label toggling with bold and underline
         document.getElementById("groupToggle").addEventListener("change", function() {
@@ -630,6 +664,8 @@ background-color: #8b4513;
 
         // Initialize Score Buttons
         function initializeScoreButtons() {
+            loadHighestScore();  // Load the highest score from localStorage
+
             const scoreButtonsContainer = document.getElementById('scoreButtons');
             scoreButtonsContainer.innerHTML = ''; // Clear existing buttons
 
@@ -639,7 +675,7 @@ background-color: #8b4513;
                 box.setAttribute('data-value', i);
                 box.textContent = i;
 
-                // Initially, only allow scores 1-5, and unlock scores based on submissions
+                // Allow scores based on the highest allowed score
                 if (i > highestScoreSubmitted) {
                     box.classList.add('disabled');
                 }
@@ -706,6 +742,7 @@ background-color: #8b4513;
                         // Check if the submitted score is equal to the current max allowed score
                         if (riderScore === highestScoreSubmitted && highestScoreSubmitted < 10) {
                             highestScoreSubmitted++;  // Unlock the next score
+                            saveHighestScore();  // Save the updated score to localStorage
                         }
 
                         initializeScoreButtons(); // Reinitialize the score buttons
@@ -862,7 +899,7 @@ background-color: #8b4513;
         // Submit PIN Function
         function submitPin() {
             const pinInput = document.getElementById("pinInput").value;
-
+            
             // Ensure the input contains only digits
             if (!/^\d+$/.test(pinInput)) {
                 alert("Incorrect PIN code.");
@@ -877,7 +914,7 @@ background-color: #8b4513;
             if (sid > 0 && sid < 15) {
                 // Store the station ID in localStorage
                 localStorage.setItem("stationID", sid);
-                console.log("PIN code is correct!");
+                console.log("Station ID stored:", sid);
 
                 // Update station display
                 const stationDisplay = document.getElementById("stationDisplay");
@@ -885,11 +922,9 @@ background-color: #8b4513;
 
                 // Close the modal
                 closePinModal();
+                hideProcessing(); // Ensure no processing spinner remains
 
-                // Hide processing after some time
-                hideProcessing(); // Call this appropriately based on your logic
-
-                // Ensure form fields are re-checked
+                // Recheck fields to update the form state
                 checkFields();
             } else {
                 // Incorrect PIN code
@@ -902,12 +937,12 @@ background-color: #8b4513;
 
         // Show Processing while waiting for PIN input
         function openPinModal() {
+            console.log("PIN modal opened.");
             const modal = document.getElementById("pinModal");
             modal.style.display = "flex";
-            
             const pinInput = document.getElementById("pinInput");
-            pinInput.value = ""; // Reset PIN input
-            pinInput.focus(); // Focus on the input to bring up the numeric keyboard
+            pinInput.value = "";  // Reset PIN input field
+            pinInput.focus();     // Automatically focus on the input field
         }
 
 // Close PIN modal
@@ -918,6 +953,7 @@ hideProcessing(); // Ensure no processing spinner when closing the modal
 }
 
 function resetForm() {
+    // Reset input fields
     document.getElementById("riderIDInput").value = "";
     document.getElementById("groupToggle").checked = false;
     document.getElementById("group").value = "No";
@@ -929,24 +965,21 @@ function resetForm() {
     const btn = document.getElementById("btn");
     btn.disabled = true; // Explicitly disable the button
 
-    // Reset first selection flag
+    // Reset the first selection flag
     isFirstSelection = true;
 
     // Explicitly check fields to ensure correct state
     checkFields();
-}
 
-// Check Station on Load
-window.onload = function() {
-const stationIDFromLocalStorage = localStorage.getItem("stationID");
-const stationDisplay = document.getElementById("stationDisplay");
-if (stationIDFromLocalStorage) {
-stationDisplay.textContent = "Ride Stop #" + stationIDFromLocalStorage;
-} else {
-stationDisplay.textContent = "Ride Stop #";
-openPinModal();
+    // Reset toggle labels - Default to "Individual"
+    const individualLabel = document.querySelector(".toggle-label.left");
+    const groupLabel = document.querySelector(".toggle-label.right");
+
+    individualLabel.style.fontWeight = "bold"; // Add bold to "Individual"
+    individualLabel.style.textDecoration = "underline"; // Underline "Individual"
+    groupLabel.style.fontWeight = "normal"; // Remove bold from "Group"
+    groupLabel.style.textDecoration = "none"; // Remove underline from "Group"
 }
-};
     </script>
 </body>
 </html>
