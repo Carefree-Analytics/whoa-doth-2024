@@ -526,7 +526,7 @@ background-color: #8b4513;
             <div id="pinModal" class="pin-modal">
                 <div class="pin-content">
                     <p>Please log in to activate your Ride Stop:</p>
-                    <input type="number" id="pinInput" placeholder="Enter PIN" />
+                    <input type="number" id="pinInput" placeholder="Enter PIN" inputmode="numeric" />
                     <div class="pin-buttons">
                         <button onclick="closePinModal()">Cancel</button>
                         <button onclick="submitPin()">Submit</button>
@@ -861,14 +861,20 @@ background-color: #8b4513;
 
         // Submit PIN Function
         function submitPin() {
-            const pinCode = document.getElementById("pinInput").value;
-            if (pinCode === "") {
-                alert("Please enter a PIN code.");
+            const pinInput = document.getElementById("pinInput").value;
+
+            // Ensure the input contains only digits
+            if (!/^\d+$/.test(pinInput)) {
+                alert("Incorrect PIN code.");
+                document.getElementById("pinInput").value = ""; // Clear the input field
+                document.getElementById("pinInput").focus(); // Refocus on the input field
                 return;
             }
-            const sid = parseInt(pinCode) - 2300; // Assuming 2300 as the base for PINs
-            if (sid > 0 && sid < 15) {
 
+            const pinCode = parseInt(pinInput, 10);
+            const sid = pinCode - 2300; // Assuming 2300 as the base for PINs
+
+            if (sid > 0 && sid < 15) {
                 // Store the station ID in localStorage
                 localStorage.setItem("stationID", sid);
                 console.log("PIN code is correct!");
@@ -886,9 +892,11 @@ background-color: #8b4513;
                 // Ensure form fields are re-checked
                 checkFields();
             } else {
+                // Incorrect PIN code
                 localStorage.removeItem("stationID");
                 alert("Incorrect PIN code.");
-                document.getElementById("pinInput").value = "";
+                document.getElementById("pinInput").value = ""; // Clear the input field
+                document.getElementById("pinInput").focus(); // Refocus on the input field
             }
         }
 
@@ -896,7 +904,10 @@ background-color: #8b4513;
         function openPinModal() {
             const modal = document.getElementById("pinModal");
             modal.style.display = "flex";
-            document.getElementById("pinInput").value = ""; // Reset PIN input
+            
+            const pinInput = document.getElementById("pinInput");
+            pinInput.value = ""; // Reset PIN input
+            pinInput.focus(); // Focus on the input to bring up the numeric keyboard
         }
 
 // Close PIN modal
