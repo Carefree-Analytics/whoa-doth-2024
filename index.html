@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Horse Parade Sign-In</title>
+    <title>WHOA DOTH Judge Portal</title>
     
     <!-- Google Fonts for a Fun and Playful Look -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@ body {
 }
 
 #stationDisplay {
-    font-size: 1.5em;
+    font-size: 1.6em;
     color: #333;
     margin-right: 10px;
 }
@@ -83,14 +83,14 @@ body {
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     text-align: center;
 }
 
 label {
     display: block;
     margin-bottom: 5px;
-    font-size: 1.1em;
+    font-size: 1.2em;
     color: #333;
 }
 
@@ -101,7 +101,7 @@ select {
     padding: 10px;
     border: 2px solid #8b4513;
     border-radius: 10px;
-    font-size: 1em;
+    font-size: 1.1em;
     transition: border-color 0.3s;
 }
 
@@ -112,33 +112,62 @@ select:focus {
     outline: none;
 }
 
-/* Group Toggle Styling */
+/* Adjust the group toggle container for better scaling */
 .toggle-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 30px;
+    font-size: 1.2em; /* Further reduced font size */
+}
+
+.toggle-label-box {
+    flex: 1;
+    text-align: center;
+    padding: 0 10px;
+    width: 120px; /* Fixed width to ensure even spacing */
 }
 
 .toggle-label {
-    margin: 0 10px; /* Adjusted spacing */
-    font-size: 1.1em;
+    font-size: 1.1em; /* Reduced font size for labels */
     color: #333;
+    font-weight: normal; /* Normal weight */
+    text-decoration: none; /* No underline by default */
+    transition: color 0.3s, text-decoration 0.3s;
 }
 
-.toggle-label.active {
-    font-weight: bold;
+.toggle-label.left {
+    text-align: right;
+    color: #7c8468; /* Green for Individual */
 }
 
+.toggle-label.right {
+    text-align: left;
+    color: #8b4513; /* Default gray for Group */
+}
+
+/* Active state styling */
+.toggle-label.active-left {
+    font-weight: normal;
+    color: #7c8468; /* Green color */
+    text-decoration: underline; /* Underline active state */
+}
+
+.toggle-label.active-right {
+    font-weight: normal;
+    color: #8b4513; /* Brown color */
+    text-decoration: underline; /* Underline active state */
+}
+
+/* Center and increase the size of the switch */
 .switch {
     position: relative;
     display: inline-block;
-    width: 60px; /* Use percentage for flexible sizing */
-    height: 30px; /* Reduce height to be more proportional */
-    margin: 0 10px; /* Space it equally */
+    width: 80px; /* Increased switch width */
+    height: 40px; /* Increased switch height */
 }
 
-.switch input { 
+.switch input {
     opacity: 0;
     width: 0;
     height: 0;
@@ -153,14 +182,14 @@ select:focus {
     bottom: 0;
     background-color: #7c8468;
     transition: .4s;
-    border-radius: 15px; /* Adjusted for smaller height */
+    border-radius: 34px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
+    height: 36px;
+    width: 36px;
     left: 2px;
     bottom: 2px;
     background-color: white;
@@ -169,16 +198,16 @@ select:focus {
 }
 
 input:checked + .slider {
-    background-color: #8b4513; /* On state */
+    background-color: #8b4513; /* Brown when checked */
 }
 
 input:checked + .slider:before {
-    transform: translateX(30px); /* Ensure it moves properly across */
+    transform: translateX(40px); /* Adjust distance to match new size */
 }
 
 /* Score Container */
 .score-container {
-    margin-top: 20px;
+    margin-top: 30px;
     text-align: center;
 }
 
@@ -193,19 +222,19 @@ input:checked + .slider:before {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 20px;
 }
 
 .box {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
+    width: 60px; /* Increased size */
+    height: 60px; /* Increased size */
     background-color: #d2b48c; /* Tan */
     border: 2px solid #8b4513; /* Saddle Brown */
     border-radius: 10px;
-    font-size: 1.2em;
+    font-size: 1.5em; /* Increase font size for better visibility */
     font-weight: bold;
     color: #333;
     cursor: pointer;
@@ -226,7 +255,7 @@ input:checked + .slider:before {
 .box.selected {
     background-color: #8b4513;
     color: #fff;
-    transform: scale(1.15); /* Slightly larger when selected */
+    transform: scale(1.2); /* Slightly larger when selected */
 }
 
 .box.disabled {
@@ -236,16 +265,30 @@ input:checked + .slider:before {
     cursor: not-allowed;
 }
 
-/* Score Feedback Animation */
+.score-feedback {
+    margin-top: 30px; /* Added more space between score buttons and feedback text */
+}
+
+/* Feedback text starts hidden and small */
 .score-feedback h3 {
-    font-size: 1.5em;
+    font-size: 1.2em;
     color: #8b4513;
+    opacity: 0;
+    transform: scale(0.8);
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+/* Feedback text pops in when active */
 .score-feedback h3.active {
-    transform: scale(1.2); /* Pop effect */
     opacity: 1;
+    transform: scale(1.3); /* Pop effect */
+}
+
+/* Add a class for fade-out */
+.score-feedback h3.fade-out {
+    opacity: 0;
+    transform: scale(0.8); /* Shrink slightly as it fades out */
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 /* Submit Button */
@@ -259,7 +302,7 @@ input:checked + .slider:before {
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -422,41 +465,6 @@ transition: background-color 0.3s;
 background-color: #8b4513;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-.box {
-width: 40px;
-height: 40px;
-font-size: 1em;
-}
-
-#btn {
-    width: 90%;
-}
-
-.switch {
-    width: 50px; /* Adjust for smaller screens */
-    height: 25px; /* Reduce height */
-}
-
-.slider:before {
-    height: 21px;
-    width: 21px;
-    transform: translateX(25px); /* Adjust translate for smaller size */
-}
-
-input:checked + .slider:before {
-    transform: translateX(18px); /* smaller distance for smaller size */
-}
-
-input[type="text"],
-input[type="number"],
-select {
-    width: 90%;
-}
-}
-
-
     </style>
 </head>
 <body>
@@ -486,12 +494,19 @@ select {
         <!-- Group Toggle -->
         <div class="form-group">
             <div class="toggle-container">
-                <span class="toggle-label">Individual</span>
+                <!-- Individual label -->
+                <div class="toggle-label-box">
+                    <span class="toggle-label left active-left">Individual</span>
+                </div>
+                <!-- Switch itself -->
                 <label class="switch">
                     <input type="checkbox" id="groupToggle">
                     <span class="slider"></span>
                 </label>
-                <span class="toggle-label">Group</span>
+                <!-- Group label -->
+                <div class="toggle-label-box">
+                    <span class="toggle-label right">Group</span>
+                </div>
             </div>
         </div>
 
@@ -588,24 +603,23 @@ select {
             document.getElementById("riderIDInput").addEventListener("input", checkFields);
         });
 
+        // Handle switch label toggling with bold and underline
         document.getElementById("groupToggle").addEventListener("change", function() {
-            const individualLabel = document.querySelector(".toggle-label:first-child");
-            const groupLabel = document.querySelector(".toggle-label:last-child");
-            
+            const individualLabel = document.querySelector(".toggle-label.left");
+            const groupLabel = document.querySelector(".toggle-label.right");
+
             if (this.checked) {
-                // Group is selected
-                individualLabel.style.textDecoration = 'none'; // Remove underline
-                individualLabel.style.color = '#333'; // Default color
-
-                groupLabel.style.textDecoration = 'underline'; // Add underline
-                groupLabel.style.color = '#8b4513'; // Brown color
+                // Group is selected, make it bold and underline
+                individualLabel.style.fontWeight = "normal"; // Remove bold
+                individualLabel.style.textDecoration = "none"; // Remove underline
+                groupLabel.style.fontWeight = "bold"; // Add bold
+                groupLabel.style.textDecoration = "underline"; // Add underline
             } else {
-                // Individual is selected
-                individualLabel.style.textDecoration = 'underline'; // Add underline
-                individualLabel.style.color = '#7c8468'; // Green color for individual
-
-                groupLabel.style.textDecoration = 'none'; // Remove underline
-                groupLabel.style.color = '#333'; // Default color
+                // Individual is selected, make it bold and underline
+                groupLabel.style.fontWeight = "normal"; // Remove bold
+                groupLabel.style.textDecoration = "none"; // Remove underline
+                individualLabel.style.fontWeight = "bold"; // Add bold
+                individualLabel.style.textDecoration = "underline"; // Add underline
             }
         });
 
@@ -616,16 +630,6 @@ select {
         function initializeScoreButtons() {
             const scoreButtonsContainer = document.getElementById('scoreButtons');
             scoreButtonsContainer.innerHTML = ''; // Clear existing buttons
-
-            // Create two rows
-            const row1 = document.createElement('div');
-            const row2 = document.createElement('div');
-            row1.style.display = 'flex';
-            row1.style.justifyContent = 'center';
-            row1.style.gap = '10px';
-            row2.style.display = 'flex';
-            row2.style.justifyContent = 'center';
-            row2.style.gap = '10px';
 
             for (let i = 1; i <= 10; i++) {
                 const box = document.createElement('div');
@@ -643,16 +647,8 @@ select {
                     box.classList.add('selected');
                 }
 
-                // Add buttons to the appropriate row
-                if (i <= 5) {
-                    row1.appendChild(box);
-                } else {
-                    row2.appendChild(box);
-                }
+                scoreButtonsContainer.appendChild(box); // Directly append to container
             }
-
-            scoreButtonsContainer.appendChild(row1);
-            scoreButtonsContainer.appendChild(row2);
         }
 
         // Handle Score Selection
@@ -676,7 +672,6 @@ select {
             }
         });
 
-        // Submit Button Event
         document.getElementById("btn").addEventListener("click", async function () {
             const riderID = document.getElementById("riderIDInput").value;
             const stationID = localStorage.getItem("stationID");
@@ -684,7 +679,7 @@ select {
             const group = document.getElementById("group").value;
 
             const btn = document.getElementById("btn");
-            btn.disabled = true;
+            btn.disabled = true; // Disable the button at the beginning of the process
 
             if (riderID && stationID && riderScore) {
                 // Populate the form fields
@@ -696,7 +691,6 @@ select {
                 showProcessing(); // Show processing alert
 
                 try {
-                    // Replace this URL with the URL of your Google Apps Script
                     const scriptURL = "https://script.google.com/macros/s/AKfycbzw-AMVe3vhqhbhblLtDRHTJSO_Tc70ePe3Yk2rn7AljayiMYMLBHX8iZLHPMMMkoRpPw/exec";
                     const response = await fetch(scriptURL, {
                         method: "POST",
@@ -704,7 +698,6 @@ select {
                     });
 
                     if (response.ok) {
-                        console.log("Success!", response);
                         hideProcessing(); // Hide processing alert
                         showAlert(); // Show success message
 
@@ -713,9 +706,8 @@ select {
                             highestScoreSubmitted++;  // Unlock the next score
                         }
 
-                        // Reinitialize the score buttons with the updated `highestScoreSubmitted`
-                        initializeScoreButtons();
-                        resetForm(); // Reset the form
+                        initializeScoreButtons(); // Reinitialize the score buttons
+                        resetForm(); // Reset the form and keep the button disabled
                     } else {
                         hideProcessing();
                         showFail(); // Show failure message
@@ -725,14 +717,15 @@ select {
                     hideProcessing();
                     showFail();
                     console.error("Error!", error.message);
-                } finally {
-                    btn.disabled = false;
+                    btn.disabled = false; // Re-enable the button if there was an error
                 }
             } else {
                 alert("Missing information. Cannot proceed.");
-                btn.disabled = false;
+                btn.disabled = false; // Re-enable the button if required fields are missing
             }
         });
+
+        let isFirstSelection = true; // Flag to track first selection
 
         // Update Feedback Based on Score
         function updateFeedback(score) {
@@ -748,8 +741,32 @@ select {
                 9: 'Incredible!',
                 10: 'Masterpiece!'
             };
+
             const costumeScoreText = document.getElementById('costumeScoreText');
-            costumeScoreText.textContent = feedback[score] || '';
+            
+            if (isFirstSelection) {
+                // Directly show the feedback without fade-out for first selection
+                costumeScoreText.textContent = feedback[score] || '';
+                costumeScoreText.classList.remove('fade-out');
+                costumeScoreText.classList.add('active');  // Pop effect for first selection
+                isFirstSelection = false;  // Set flag to false for subsequent selections
+            } else {
+                // Start by fading out the current text
+                costumeScoreText.classList.add('fade-out');  // Apply fade-out effect
+
+                // After fade-out finishes, update the text and fade it back in
+                setTimeout(() => {
+                    costumeScoreText.textContent = feedback[score] || '';  // Change feedback text
+
+                    // Remove the fade-out class, so it can transition back in
+                    costumeScoreText.classList.remove('fade-out');
+
+                    // Re-trigger the "pop" and fade-in effect
+                    costumeScoreText.classList.remove('active');  // Reset pop effect
+                    void costumeScoreText.offsetWidth;  // Trigger reflow to restart the animation
+                    costumeScoreText.classList.add('active');  // Apply the active class for the pop effect
+                }, 200);  // 200ms corresponds to the fade-out duration
+            }
         }
 
         function checkFields() {
@@ -812,10 +829,10 @@ select {
         let processingAnimation;
         function animateProcessingDots() {
             const processingText = document.getElementById("processingText");
-            if (processingText.textContent.length < 11) {
+            if (processingText.textContent.length < 13) {
                 processingText.textContent += ".";
             } else {
-                processingText.textContent = "Processing";
+                processingText.textContent = "Registering";
             }
         }
 
@@ -829,7 +846,7 @@ select {
             clearInterval(processingAnimation);
             const processingAlert = document.querySelector(".alert-process");
             processingAlert.style.display = "none";
-            document.getElementById("processingText").textContent = "Processing";
+            document.getElementById("processingText").textContent = "Registering";
         }
 
         // Close Alerts
@@ -895,11 +912,15 @@ function resetForm() {
     initializeScoreButtons();
     document.getElementById("costumeScoreText").textContent = "";
 
-    // Explicitly disable the submit button after reset
+    // Disable the submit button after reset
     const btn = document.getElementById("btn");
-    btn.disabled = true; // Disable the button after resetting
+    btn.disabled = true; // Explicitly disable the button
 
-    checkFields(); // Re-check fields to ensure correct state
+    // Reset first selection flag
+    isFirstSelection = true;
+
+    // Explicitly check fields to ensure correct state
+    checkFields();
 }
 
 // Check Station on Load
