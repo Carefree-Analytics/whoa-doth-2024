@@ -21,7 +21,7 @@
 
 body {
     font-family: 'Nunito', cursive;
-    background-color: #f5f5dc; /* Beige for classic western feel */
+    background-color: #f9f6ee; /* Beige for classic western feel */
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -261,7 +261,7 @@ input:checked + .slider:before {
 }
 
 .box.disabled {
-    background-color: #f5f5dc; /* Beige */
+    background-color: #E6DCD3; /* Beige */
     border-color: #b5b5b5;
     color: #b5b5b5;
     cursor: not-allowed;
@@ -316,7 +316,7 @@ input:checked + .slider:before {
 }
 
 #btn:disabled {
-    background-color: #f5f5dc;
+    background-color: #E6DCD3;
     color: #b5b5b5;
     cursor: not-allowed;
 }
@@ -385,7 +385,7 @@ input:checked + .slider:before {
 
 /* Processing Animation */
 .spinner {
-    border: 4px solid #f5f5dc;
+    border: 4px solid #E6DCD3;
     border-top: 4px solid #8b4513;
     border-radius: 50%;
     width: 40px;
@@ -636,7 +636,7 @@ background-color: #8b4513;
 
         function loadHighestScore() {
             const storedScore = localStorage.getItem('highestScoreSubmitted');
-            highestScoreSubmitted = storedScore ? parseInt(storedScore, 10) : 5;
+            highestScoreSubmitted = storedScore ? parseInt(storedScore, 10) : 8;
         }
 
         // Handle switch label toggling with bold and underline
@@ -659,7 +659,7 @@ background-color: #8b4513;
             }
         });
 
-        let highestScoreSubmitted = 5; // Maximum score the judge can submit at first
+        let highestScoreSubmitted = 8; // Maximum score the judge can submit at first
         let selectedScore = null;
 
         // Initialize Score Buttons
@@ -810,24 +810,25 @@ background-color: #8b4513;
 
         function checkFields() {
             const btn = document.getElementById("btn");
-            const riderIDInput = document.getElementById("riderIDInput").value;
+            const riderIDStatus = validateRiderID(); // Check the rider ID status
             const scoreValid = selectedScore !== null;
-            const riderIDValid = validateRiderID(); // Make sure this checks for valid IDs
             const stationDisplay = document.getElementById("stationDisplay").textContent;
 
-            // Check if the station is available and rider details are valid
+            // Check if the station is available
             const stationValid = stationDisplay !== "Ride Stop #";
 
-            if (riderIDValid && scoreValid && stationValid) {
+            if (riderIDStatus === "valid" && scoreValid && stationValid) {
                 btn.disabled = false; // Enable the button if everything is valid
                 document.getElementById("mainHeader").textContent = "Rider Details Ready to Submit!";
                 document.getElementById("mainHeader").style.color = 'green';
             } else {
-                // If form is incomplete, disable the button
-                btn.disabled = true;
+                btn.disabled = true; // Disable the button if anything is missing
 
-                // Set appropriate error messages
-                if (!riderIDValid) {
+                // Display appropriate error messages
+                if (riderIDStatus === "empty") {
+                    document.getElementById("mainHeader").textContent = "Please enter Rider Number.";
+                    document.getElementById("mainHeader").style.color = 'red';
+                } else if (riderIDStatus === "invalid") {
                     document.getElementById("mainHeader").textContent = "Invalid Rider Number.";
                     document.getElementById("mainHeader").style.color = 'red';
                 } else if (!scoreValid) {
@@ -842,9 +843,18 @@ background-color: #8b4513;
 
         // Validate Rider ID
         function validateRiderID() {
-            const riderIDInput = document.getElementById("riderIDInput");
-            const riderIDValue = parseInt(riderIDInput.value, 10);
-            return riderIDValue >= 200 && riderIDValue <= 400;
+            const riderIDInput = document.getElementById("riderIDInput").value.trim();
+            
+            if (!riderIDInput) {
+                return "empty"; // No value entered
+            }
+            
+            const riderIDValue = parseInt(riderIDInput, 10);
+            if (isNaN(riderIDValue) || riderIDValue < 200 || riderIDValue > 400) {
+                return "invalid"; // Invalid number entered
+            }
+            
+            return "valid"; // Valid rider number
         }
 
         // Show Alert
