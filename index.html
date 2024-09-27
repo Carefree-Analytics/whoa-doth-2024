@@ -27,7 +27,7 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    font-size: 18px;
+    font-size: 1.1rem;
 }
 
 /* Header Styling */
@@ -62,7 +62,7 @@ body {
     background: none;
     border: none;
     color: #8b4513; /* Saddle Brown for visibility */
-    font-size: 1.2em;
+    font-size: 1.1em;
     cursor: pointer;
     transition: color 0.3s;
 }
@@ -87,22 +87,18 @@ body {
     text-align: center;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 1.2em;
-    color: #333;
-}
-
 input[type="text"],
 input[type="number"],
 select {
-    width: 80%;
+    width: 90%;
+    height: 70px;
     padding: 10px;
     border: 2px solid #8b4513;
     border-radius: 10px;
-    font-size: 1.1em;
+    font-size: 1.3em;
+    text-align: center; /* Center the text horizontally */
     transition: border-color 0.3s;
+    box-sizing: border-box; /* Ensure padding and border don't overflow the width */
 }
 
 input[type="text"]:focus,
@@ -222,17 +218,17 @@ input:checked + .slider:before {
     display: grid;
     grid-template-columns: repeat(5, 60px); /* Each row will have 5 columns */
     grid-template-rows: auto auto; /* Two rows */
-    gap: 15px;
+    gap: 12px;
     justify-content: center; /* Center the grid horizontally */
-    row-gap: 20px; /* Optional: extra space between the two rows */
+    row-gap: 18px; /* Optional: extra space between the two rows */
 }
 
 .box {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px; /* Increased size */
-    height: 60px; /* Increased size */
+    width: 58px; /* Increased size */
+    height: 58px; /* Increased size */
     background-color: #d2b48c; /* Tan */
     border: 2px solid #8b4513; /* Saddle Brown */
     border-radius: 10px;
@@ -246,7 +242,7 @@ input:checked + .slider:before {
 .box:hover {
     background-color: #8b4513;
     color: #fff;
-    transform: scale(1.1);
+    transform: scale(1.025);
 }
 
 .box:active {
@@ -257,7 +253,7 @@ input:checked + .slider:before {
 .box.selected {
     background-color: #8b4513;
     color: #fff;
-    transform: scale(1.2); /* Slightly larger when selected */
+    transform: scale(1.1); /* Slightly larger when selected */
 }
 
 .box.disabled {
@@ -295,7 +291,7 @@ input:checked + .slider:before {
 
 /* Submit Button */
 #btn {
-    width: 80%;
+    width: 75%;
     padding: 12px;
     background-color: #8b4513;
     color: white;
@@ -470,19 +466,18 @@ background-color: #8b4513;
     </style>
 </head>
 <body>
-    <!-- Station Information -->
-    <div class="station-info">
-        <h2 id="stationDisplay">Ride Stop #</h2>
-        <button id="changeStopButton" title="Change Ride Stop">
-            <i class="fas fa-pencil-alt"></i>
-        </button>
-    </div>
-
     <!-- Form Container -->
     <div class="form-container">
+        <!-- Station Information -->
+        <div class="station-info">
+            <h2 id="stationDisplay">Ride Stop #</h2>
+            <button id="changeStopButton" title="Change Ride Stop">
+                <i class="fas fa-pencil-alt"></i>
+            </button>
+        </div>
+
         <!-- Rider ID Input -->
         <div class="form-group">
-            <label for="riderIDInput">Rider Number:</label>
             <input
                 type="text"
                 id="riderIDInput"
@@ -555,15 +550,14 @@ background-color: #8b4513;
                 <p id="processingText">Processing</p>
             </div>
         </div>
-
         <!-- Submit Button -->
         <button id="btn" disabled>Submit Visit and Costume Score</button>
-    </div>
 
-    <!-- Main Header -->
-    <p id="mainHeader" style="margin-top: 20px; font-size: 1.2em; color: green; text-align: center;">
-        <i>Rider Details Ready to Submit!</i>
-    </p>
+        <!-- Main Header -->
+        <p id="mainHeader" style="margin-top: 20px; font-size: 1.2em; color: green; text-align: center;">
+            <i>Rider Details Ready to Submit!</i>
+        </p>
+    </div>
 
     <!-- Hidden Form for Submission -->
     <form id="formToSubmit">
