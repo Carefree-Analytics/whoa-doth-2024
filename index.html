@@ -763,14 +763,14 @@ background-color: #8b4513;
         // Update Feedback Based on Score
         function updateFeedback(score) {
             const feedback = {
-                1: 'Basic effort',
-                2: 'Good try',
-                3: 'NICE! Well done!',
-                4: 'WOW! Excellent!',
-                5: 'Outstanding!',
+                1: 'No costume',
+                2: 'Basic effort',
+                3: 'Good try',
+                4: 'Nice! Well done!',
+                5: 'WOW! Excellent!',
                 6: 'Amazing!',
-                7: 'Phenomenal!',
-                8: 'Spectacular!',
+                7: 'Outstanding!',
+                8: 'Phenomenal!',
                 9: 'Incredible!',
                 10: 'Masterpiece!'
             };
@@ -913,7 +913,7 @@ background-color: #8b4513;
             }
 
             const pinCode = parseInt(pinInput, 10);
-            const sid = pinCode - 2300; // Assuming 2300 as the base for PINs
+            const sid = pinCode - 2400; // Assuming 2300 as the base for PINs
 
             if (sid > 0 && sid < 15) {
                 // Store the station ID in localStorage
