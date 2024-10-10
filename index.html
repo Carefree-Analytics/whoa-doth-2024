@@ -562,7 +562,7 @@ background-color: #8b4513;
     <!-- Hidden Form for Submission -->
     <form id="formToSubmit">
         <input type="hidden" name="riderID" id="riderID" value="" />
-        <input type="hidden" name="group" id="group" value="No" />
+        <input type="hidden" name="group" id="group" value="" />
         <input type="hidden" name="riderScore" id="hiddenRiderScore" value="" />
         <input type="hidden" name="stationID" id="stationID" value="" />
     </form>
@@ -574,13 +574,6 @@ background-color: #8b4513;
             initializeScoreButtons();
             checkFields();
             hideProcessing();
-
-            // If riderID is in the URL, set it to the input field
-            const urlParams = new URLSearchParams(window.location.search);
-            const riderIDFromURL = urlParams.get("riderID");
-            if (riderIDFromURL) {
-                document.getElementById("riderIDInput").value = riderIDFromURL;
-            }
 
             // Station ID handling here
             const stationIDFromLocalStorage = localStorage.getItem("stationID");
@@ -844,7 +837,7 @@ background-color: #8b4513;
             }
             
             const riderIDValue = parseInt(riderIDInput, 10);
-            if (isNaN(riderIDValue) || riderIDValue < 200 || riderIDValue > 400) {
+            if (isNaN(riderIDValue) || riderIDValue < 100 || riderIDValue > 400) {
                 return "invalid"; // Invalid number entered
             }
             
@@ -960,7 +953,7 @@ function resetForm() {
     // Reset input fields
     document.getElementById("riderIDInput").value = "";
     document.getElementById("groupToggle").checked = false;
-    document.getElementById("group").value = "No";
+    document.getElementById("group").value = "Individual";
     selectedScore = null;
     initializeScoreButtons();
     document.getElementById("costumeScoreText").textContent = "";
